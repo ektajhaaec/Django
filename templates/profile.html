@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Profile Directory</title>
+</head>
+<body>
+<div style="padding: 20px;">
+    <h2>Create Profile</h2>
+
+    <form method="POST" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Enter your name">
+        <input type="text" name="address" placeholder="Enter your address">
+        <input type="text" name="mobile_number" placeholder="Enter your mobile number">
+        <input type="text" name="email" placeholder="Enter your email">
+        <button type="submit">Submit</button>
+    </form>
+     {% if create_message %}
+    <p style="color: {{ color}};">{{ create_message }}</p>
+    {% endif %}
+
+
+
+    <h2>List of profiles:</h2>
+    {% if delete_message %}
+    <p style="color: {{ color}};">{{ delete_message }}</p>
+    {% endif %}
+    <ul>
+        {% for profile in stored_profiles %}
+        <li>
+            <h4>Profile info for {{ profile.name }}</h4>
+            <p>Name: {{ profile.name }}</p>
+            <p>Address: {{ profile.address }}</p>
+            <p>Mobile Number: {{ profile.mobile_number }}</p>
+            <p>Email: {{profile.email }}
+            <form method="POST" action="{% url 'profile' %}" style="display:inline;">
+                {% csrf_token %}
+                <input type="hidden" name="name" value="{{ profile.name }}">
+                <button type="submit" name="delete">Delete</button>
+            </form>
+        </li>
+        
+
+        {% empty %}
+        <li>No profiles stored yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+</body>
+</html>
